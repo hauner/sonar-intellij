@@ -50,7 +50,7 @@ public class SonarQubeExternalAnnotator extends ExternalAnnotator<SonarQubeExter
   private static final Logger LOG = Logger.getInstance(SonarQubeExternalAnnotator.class);
 
   public static class State {
-    private PsiJavaFile file;
+    private PsiFile file;
     private VirtualFile vfile;
     private Project project;
     private SonarQubeServer server;
@@ -61,15 +61,12 @@ public class SonarQubeExternalAnnotator extends ExternalAnnotator<SonarQubeExter
   @Nullable
   @Override
   public State collectInformation(@NotNull PsiFile file) {
-    if (!(file instanceof PsiJavaFile)) {
-      return null;
-    }
     VirtualFile vfile = file.getVirtualFile();
     if (vfile == null) {
       return null;
     }
     State result = new State();
-    result.file = (PsiJavaFile) file;
+    result.file = file;
     result.vfile = vfile;
     result.project = file.getProject();
     ProjectSettings projectSettings = result.project.getComponent(ProjectSettings.class);
