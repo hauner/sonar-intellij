@@ -20,8 +20,8 @@ public class SonarQubeAssociator {
   private ProjectSettings settings;
   private Project p;
 
-  public SonarQubeAssociator (SonarQubeAction action, Project p, ProjectSettings settings,
-      MavenProjectsManager mavenProjectsManager, @NotNull ISonarRemoteProject sonarProject) {
+  public SonarQubeAssociator (Project p, ProjectSettings settings, MavenProjectsManager mavenProjectsManager,
+                              @NotNull ISonarRemoteProject sonarProject) {
     this.p = p;
     this.settings = settings;
     this.mavenProjectsManager = mavenProjectsManager;

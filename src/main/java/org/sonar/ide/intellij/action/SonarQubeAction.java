@@ -44,7 +44,7 @@ public class SonarQubeAction {
       if (sonarProject == null) {
         settings.unassociate();
       } else {
-        SonarQubeAssociator associator = new SonarQubeAssociator(this, p, settings, mavenProjectsManager, sonarProject);
+        SonarQubeAssociator associator = new SonarQubeAssociator(p, settings, mavenProjectsManager, sonarProject);
         associator.associate();
       }
     }
