@@ -16,19 +16,16 @@ import java.util.List;
 
 public class SonarQubeAssociator {
   private final MavenProjectsManager mavenProjectsManager;
-  private final ISonarRemoteProject sonarProject;
   private ProjectSettings settings;
   private Project p;
 
-  public SonarQubeAssociator (Project p, ProjectSettings settings, MavenProjectsManager mavenProjectsManager,
-                              @NotNull ISonarRemoteProject sonarProject) {
+  public SonarQubeAssociator (Project p, ProjectSettings settings, MavenProjectsManager mavenProjectsManager) {
     this.p = p;
     this.settings = settings;
     this.mavenProjectsManager = mavenProjectsManager;
-    this.sonarProject = sonarProject;
   }
 
-  public void associate() {
+  public void associate(@NotNull ISonarRemoteProject sonarProject) {
     ModuleManager moduleManager = ModuleManager.getInstance(p);
     Module[] ijModules = moduleManager.getModules();
     settings.getModuleKeys().clear();
