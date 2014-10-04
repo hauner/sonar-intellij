@@ -5,7 +5,6 @@ import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
@@ -24,6 +23,7 @@ public class SonarQubeActionTest {
   ProjectSettings settings;
   MavenProjectsManager manager;
   AssociateDialog dialog;
+  SonarQubeAssociator associator;
 
   @Before
   public void setup() {
@@ -31,6 +31,7 @@ public class SonarQubeActionTest {
     settings = new ProjectSettings();
     manager = mock(MavenProjectsManager.class);
     dialog = mock(AssociateDialog.class);
+    associator = mock(SonarQubeAssociator.class);
   }
 
 
@@ -42,7 +43,7 @@ public class SonarQubeActionTest {
     settings.setServerId(serverId);
     settings.setProjectKey(projectKey);
 
-    SonarQubeAction action = new SonarQubeAction(null, settings, null, dialog);
+    SonarQubeAction action = new SonarQubeAction(null, settings, null, dialog, null);
     action.associate();
 
     verify(dialog).setSelectedSonarQubeProject(serverId, projectKey);
@@ -58,7 +59,7 @@ public class SonarQubeActionTest {
     when(manager.getRootProjects()).thenReturn(Arrays.asList(mavenProject));
     when(mavenProject.getDisplayName()).thenReturn(displayName);
 
-    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog);
+    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
     action.associate();
 
     verify(dialog).setFilter(displayName);
@@ -69,7 +70,7 @@ public class SonarQubeActionTest {
     String displayName = "displayName";
     when(manager.isMavenizedProject()).thenReturn(false);
 
-    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog);
+    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
     action.associate();
 
     verify(dialog, never()).setFilter(displayName);
@@ -80,7 +81,7 @@ public class SonarQubeActionTest {
     settings.setServerId("serverId");
     settings.setProjectKey("projectKey");
 
-    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog);
+    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
     action.associate();
 
     verify(dialog).show();
@@ -88,7 +89,7 @@ public class SonarQubeActionTest {
 
   @Test
   public void doesShowDialogWhenNotAssociated() {
-    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog);
+    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
     action.associate();
 
     verify(dialog).show();
@@ -98,7 +99,7 @@ public class SonarQubeActionTest {
   public void unassociatesProjectIfDialogClosedWithUnassociate() {
     when(dialog.getExitCode()).thenReturn(AssociateDialog.UNASSOCIATE_EXIT_CODE);
 
-    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog);
+    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
     action.associate();
 
     verify(dialog).show();
@@ -111,7 +112,7 @@ public class SonarQubeActionTest {
     when(dialog.getExitCode()).thenReturn(DialogWrapper.OK_EXIT_CODE);
     when(dialog.getSelectedSonarQubeProject()).thenReturn(null);
 
-    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog);
+    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
     action.associate();
 
     verify(dialog).show();
@@ -119,18 +120,18 @@ public class SonarQubeActionTest {
     assertThat(settings.isAssociated(), is(false));
   }
 
-  @Ignore("un-replaceable dependency for now...")
+  @Test
   public void associateProjectIfSelectedInDialog() {
     ISonarRemoteProject sonarProject = mock(ISonarRemoteProject.class);
 
     when(dialog.getExitCode()).thenReturn(DialogWrapper.OK_EXIT_CODE);
     when(dialog.getSelectedSonarQubeProject()).thenReturn(sonarProject);
 
-    SonarQubeAction action = new SonarQubeAction(project, settings, manager, dialog);
+    SonarQubeAction action = new SonarQubeAction(project, settings, manager, dialog, associator);
     action.associate();
 
     verify(dialog).show();
     verify(dialog, atLeastOnce()).getExitCode();
-    assertThat(settings.isAssociated(), is(true));
+    verify(associator).associate(sonarProject);
   }
 }

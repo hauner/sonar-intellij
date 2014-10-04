@@ -12,12 +12,15 @@ public class SonarQubeAction {
   private ProjectSettings settings;
   private MavenProjectsManager mavenProjectsManager;
   private AssociateDialog dialog;
+  private SonarQubeAssociator associator;
 
-  public SonarQubeAction(Project project, ProjectSettings settings, MavenProjectsManager mavenProjectsManager, AssociateDialog dialog) {
+  public SonarQubeAction(Project project, ProjectSettings settings, MavenProjectsManager mavenProjectsManager,
+                         AssociateDialog dialog, SonarQubeAssociator associator) {
     this.project = project;
     this.settings = settings;
     this.mavenProjectsManager = mavenProjectsManager;
     this.dialog = dialog;
+    this.associator = associator;
   }
 
   public void associate() {
@@ -44,7 +47,6 @@ public class SonarQubeAction {
       if (sonarProject == null) {
         settings.unassociate();
       } else {
-        SonarQubeAssociator associator = new SonarQubeAssociator(p, settings, mavenProjectsManager);
         associator.associate(sonarProject);
       }
     }

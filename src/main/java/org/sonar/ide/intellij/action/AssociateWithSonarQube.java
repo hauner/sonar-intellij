@@ -36,8 +36,9 @@ public class AssociateWithSonarQube extends AnAction {
       MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(p);
       ProjectSettings settings = p.getComponent(ProjectSettings.class);
       AssociateDialog dialog = new AssociateDialog(p, settings.isAssociated());
+      SonarQubeAssociator associator = new SonarQubeAssociator(p, settings, mavenProjectsManager);
 
-      SonarQubeAction action = new SonarQubeAction(p, settings, mavenProjectsManager, dialog);
+      SonarQubeAction action = new SonarQubeAction(p, settings, mavenProjectsManager, dialog, associator);
       action.associate();
     }
   }
