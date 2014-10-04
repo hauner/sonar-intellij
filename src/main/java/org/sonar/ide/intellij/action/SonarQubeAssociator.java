@@ -18,12 +18,10 @@ public class SonarQubeAssociator {
   private final MavenProjectsManager mavenProjectsManager;
   private final ISonarRemoteProject sonarProject;
   private ProjectSettings settings;
-  private SonarQubeAction action;
   private Project p;
 
   public SonarQubeAssociator (SonarQubeAction action, Project p, ProjectSettings settings,
       MavenProjectsManager mavenProjectsManager, @NotNull ISonarRemoteProject sonarProject) {
-    this.action = action;
     this.p = p;
     this.settings = settings;
     this.mavenProjectsManager = mavenProjectsManager;
@@ -49,15 +47,58 @@ public class SonarQubeAssociator {
         return;
       }
       MavenProject rootProject = rootProjects.get(0);
-      String branchSuffix = action.guessBranchSuffix(rootProject, sonarProject.getKey());
+      String branchSuffix = guessBranchSuffix(rootProject, sonarProject.getKey());
       List<ISonarRemoteModule> sonarModules = WSClientFactory.getInstance().getSonarClient(sonarProject.getServer()).getRemoteModules(sonarProject);
       if (sonarModules.size() + 1 != mavenModules.size()) {
         console.info("Project has " + mavenModules.size() + " modules while remote SonarQube project has " + (sonarModules.size() + 1) + " modules");
       }
-      action.associateModules(settings, mavenProjectsManager, sonarProject, ijModules, console, branchSuffix, sonarModules);
+      associateModules(settings, mavenProjectsManager, sonarProject, ijModules, console, branchSuffix, sonarModules);
     }
 
     settings.setServerId(sonarProject.getServer().getId());
     settings.setProjectKey(sonarProject.getKey());
+  }
+
+  private void associateModules(ProjectSettings settings, MavenProjectsManager mavenProjectsManager, ISonarRemoteProject sonarProject,
+                        Module[] ijModules, SonarQubeConsole console, String branchSuffix, List<ISonarRemoteModule> sonarModules) {
+    for (Module ijModule : ijModules) {
+      MavenProject mavenModule = mavenProjectsManager.findProject(ijModule);
+      if (mavenModule == null) {
+        console.error("Module " + ijModule.getName() + " is not a Maven module");
+      } else {
+        String expectedKey = sonarKey(mavenModule) + branchSuffix;
+        if (expectedKey.equals(sonarProject.getKey())) {
+          settings.getModuleKeys().put(ijModule.getName(), expectedKey);
+        } else {
+          associateModule(settings, console, sonarModules, ijModule, expectedKey);
+        }
+      }
+    }
+  }
+
+  private void associateModule(ProjectSettings settings, SonarQubeConsole console, List<ISonarRemoteModule> sonarModules, Module ijModule, String expectedKey) {
+    boolean found = false;
+    for (ISonarRemoteModule sonarModule : sonarModules) {
+      if (expectedKey.equals(sonarModule.getKey())) {
+        settings.getModuleKeys().put(ijModule.getName(), expectedKey);
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      console.error("Unable to find matching SonarQube module for IntelliJ module " + ijModule.getName());
+    }
+  }
+
+  private String guessBranchSuffix(MavenProject rootProject, String key) {
+    String rootKey = sonarKey(rootProject);
+    if (key.startsWith(rootKey)) {
+      return key.substring(rootKey.length());
+    }
+    return "";
+  }
+
+  private String sonarKey(MavenProject project) {
+    return project.getMavenId().getGroupId() + ":" + project.getMavenId().getArtifactId();
   }
 }
