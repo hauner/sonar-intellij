@@ -26,6 +26,7 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
+import org.sonar.ide.intellij.console.SonarQubeConsole;
 import org.sonar.ide.intellij.util.SonarQubeBundle;
 
 
@@ -38,7 +39,7 @@ public class AssociateWithSonarQube extends AnAction {
       ProjectSettings settings = p.getComponent(ProjectSettings.class);
       AssociateDialog dialog = new AssociateDialog(p, settings.isAssociated());
       SonarQubeAssociator associator = new SonarQubeAssociator(p, settings, mavenProjectsManager,
-          ModuleManager.getInstance(p));
+          ModuleManager.getInstance(p), SonarQubeConsole.getSonarQubeConsole(p));
 
       SonarQubeAction action = new SonarQubeAction(p, settings, mavenProjectsManager, dialog, associator);
       action.associate();

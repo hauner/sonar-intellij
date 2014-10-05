@@ -19,19 +19,20 @@ public class SonarQubeAssociator {
   private ProjectSettings settings;
   private Project p;
   private ModuleManager moduleManager;
+  private SonarQubeConsole console;
 
   public SonarQubeAssociator (Project p, ProjectSettings settings, MavenProjectsManager mavenProjectsManager,
-                              ModuleManager moduleManger) {
+                              ModuleManager moduleManger, SonarQubeConsole console) {
     this.p = p;
     this.settings = settings;
     this.mavenProjectsManager = mavenProjectsManager;
     this.moduleManager = moduleManger;
+    this.console = console;
   }
 
   public void associate(@NotNull ISonarRemoteProject sonarProject) {
     Module[] ijModules = moduleManager.getModules();
     settings.getModuleKeys().clear();
-    SonarQubeConsole console = SonarQubeConsole.getSonarQubeConsole(p);
     if (ijModules.length == 1) {
       settings.getModuleKeys().put(ijModules[0].getName(), sonarProject.getKey());
     } else if (ijModules.length > 1) {
