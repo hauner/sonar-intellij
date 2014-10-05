@@ -28,6 +28,7 @@ import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.console.SonarQubeConsole;
 import org.sonar.ide.intellij.util.SonarQubeBundle;
+import org.sonar.ide.intellij.wsclient.WSClientFactory;
 
 
 public class AssociateWithSonarQube extends AnAction {
@@ -39,7 +40,7 @@ public class AssociateWithSonarQube extends AnAction {
       ProjectSettings settings = p.getComponent(ProjectSettings.class);
       AssociateDialog dialog = new AssociateDialog(p, settings.isAssociated());
       SonarQubeAssociator associator = new SonarQubeAssociator(p, settings, mavenProjectsManager,
-          ModuleManager.getInstance(p), SonarQubeConsole.getSonarQubeConsole(p));
+          ModuleManager.getInstance(p), SonarQubeConsole.getSonarQubeConsole(p), WSClientFactory.getInstance());
 
       SonarQubeAction action = new SonarQubeAction(p, settings, mavenProjectsManager, dialog, associator);
       action.associate();

@@ -20,14 +20,16 @@ public class SonarQubeAssociator {
   private Project p;
   private ModuleManager moduleManager;
   private SonarQubeConsole console;
+  private WSClientFactory clientFactory;
 
   public SonarQubeAssociator (Project p, ProjectSettings settings, MavenProjectsManager mavenProjectsManager,
-                              ModuleManager moduleManger, SonarQubeConsole console) {
+                              ModuleManager moduleManger, SonarQubeConsole console, WSClientFactory clientFactory) {
     this.p = p;
     this.settings = settings;
     this.mavenProjectsManager = mavenProjectsManager;
     this.moduleManager = moduleManger;
     this.console = console;
+    this.clientFactory = clientFactory;
   }
 
   public void associate(@NotNull ISonarRemoteProject sonarProject) {
@@ -48,7 +50,7 @@ public class SonarQubeAssociator {
       }
       MavenProject rootProject = rootProjects.get(0);
       String branchSuffix = guessBranchSuffix(rootProject, sonarProject.getKey());
-      List<ISonarRemoteModule> sonarModules = WSClientFactory.getInstance().getSonarClient(sonarProject.getServer()).getRemoteModules(sonarProject);
+      List<ISonarRemoteModule> sonarModules = clientFactory.getSonarClient(sonarProject.getServer()).getRemoteModules(sonarProject);
       if (sonarModules.size() + 1 != mavenModules.size()) {
         console.info("Project has " + mavenModules.size() + " modules while remote SonarQube project has " + (sonarModules.size() + 1) + " modules");
       }
