@@ -43,7 +43,7 @@ import java.net.Proxy;
 import java.net.URL;
 import java.util.List;
 
-public final class WSClientFactory implements ApplicationComponent {
+public /*final*/ class WSClientFactory implements ApplicationComponent {
 
   private static final Logger LOG = Logger.getInstance(WSClientFactory.class);
 
