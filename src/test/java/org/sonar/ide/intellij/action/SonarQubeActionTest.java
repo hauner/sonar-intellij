@@ -2,7 +2,6 @@ package org.sonar.ide.intellij.action;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,11 +9,10 @@ import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.wsclient.ISonarRemoteProject;
 
-import java.util.Arrays;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
+
 
 // characterization tests
 @SuppressWarnings("ConstantConditions")
@@ -50,23 +48,7 @@ public class SonarQubeActionTest {
   }
 
   @Test
-  public void initializesProjectFilterInDialogWhenNotAssociatedToMavenProject() {
-    String displayName = "displayName";
-
-    MavenProject mavenProject = mock(MavenProject.class);
-    when(manager.isMavenizedProject()).thenReturn(true);
-    when(manager.hasProjects()).thenReturn(true);
-    when(manager.getRootProjects()).thenReturn(Arrays.asList(mavenProject));
-    when(mavenProject.getDisplayName()).thenReturn(displayName);
-
-    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
-    action.associate();
-
-    verify(dialog).setFilter(displayName);
-  }
-
-  @Test
-  public void initializesProjectFilterInDialogWhenNotAssociatedToProject() {
+  public void initializeProjectFilterInDialogWhenNotAssociatedToProject() {
     String displayName = "displayName";
 
     SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
@@ -86,14 +68,15 @@ public class SonarQubeActionTest {
   }
 
   @Test
-  public void doesNotInitializeProjectFilterInDialogWhenNotAssociatedToUnknownProjectType() {
-    String displayName = "displayName";
-    when(manager.isMavenizedProject()).thenReturn(false);
+  public void doNotInitializeProjectFilterInDialogIfAlreadyAssociated() {
+    String displayName = "name";
+    settings.setServerId("id");
+    settings.setProjectKey("key");
 
     SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
-    action.associate();
+    action.associate(displayName);
 
-    verify(dialog, never()).setFilter(displayName);
+    verify(dialog, never ()).setFilter(anyString());
   }
 
   @Test

@@ -25,15 +25,7 @@ public class SonarQubeAction {
   }
 
   public void associate() {
-    String displayName = null;
-
-    if (!settings.isAssociated()) {
-      if (mavenProjectsManager.isMavenizedProject() && mavenProjectsManager.hasProjects()) {
-        displayName = mavenProjectsManager.getRootProjects().get(0).getDisplayName();
-      }
-    }
-
-    associate(displayName);
+    associate(null);
   }
 
   public void associate(@Nullable String projectName) {
