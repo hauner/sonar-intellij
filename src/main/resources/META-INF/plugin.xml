@@ -24,6 +24,7 @@
        on how to target different products -->
   <depends>com.intellij.modules.lang</depends>
   <depends>org.jetbrains.idea.maven</depends>
+  <depends>org.jetbrains.plugins.gradle</depends>
 
   <application-components>
     <component>
@@ -46,7 +47,13 @@
     </component>
   </project-components>
 
-  <actions>
+  <module-components>
+    <component>
+      <implementation-class>org.sonar.ide.intellij.gradle.SonarModelSettings</implementation-class>
+    </component>
+  </module-components>
+
+    <actions>
     <action id="associate" icon="/images/onde-sonar-16.png" class="org.sonar.ide.intellij.action.AssociateWithSonarQube" text="Associate with SonarQube"
             description="Associate with a remote SonarQube server">
       <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="AddFrameworkSupport"/>
@@ -69,5 +76,11 @@
 
     <toolWindow id="SonarQube" anchor="bottom" icon="/images/onde-sonar-13.png" factoryClass="org.sonar.ide.intellij.toolwindow.SonarQubeToolWindowFactory"/>
 
+    <externalProjectDataService implementation="org.sonar.ide.intellij.gradle.SonarModelDataService"/>
   </extensions>
+
+  <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
+    <projectResolve implementation="org.sonar.ide.intellij.gradle.SonarResolverExtension"/>
+  </extensions>
+
 </idea-plugin>
