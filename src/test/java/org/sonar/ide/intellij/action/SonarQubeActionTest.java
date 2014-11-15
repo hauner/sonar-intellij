@@ -66,6 +66,26 @@ public class SonarQubeActionTest {
   }
 
   @Test
+  public void initializesProjectFilterInDialogWhenNotAssociatedToProject() {
+    String displayName = "displayName";
+
+    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
+    action.associate(displayName);
+
+    verify(dialog).setFilter(displayName);
+  }
+
+  @Test
+  public void doNotInitializeProjectFilterInDialogWithoutProjectName() {
+    String displayName = null;
+
+    SonarQubeAction action = new SonarQubeAction(null, settings, manager, dialog, null);
+    action.associate(displayName);
+
+    verify(dialog, never ()).setFilter(anyString());
+  }
+
+  @Test
   public void doesNotInitializeProjectFilterInDialogWhenNotAssociatedToUnknownProjectType() {
     String displayName = "displayName";
     when(manager.isMavenizedProject()).thenReturn(false);
