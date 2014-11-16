@@ -1,4 +1,4 @@
-package org.sonar.ide.intellij.action;
+package org.sonar.ide.intellij.action.associator;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -8,8 +8,6 @@ import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
-import org.sonar.ide.intellij.action.associator.StandardAssociator;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.console.SonarQubeConsole;
 import org.sonar.ide.intellij.model.SonarQubeServer;
@@ -30,7 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SuppressWarnings("ConstantConditions")
-public class SonarQubeAssociatorTest {
+public class StandardAssociatorTest {
   Project project;
   ProjectSettings settings;
   MavenProjectsManager mavenManager;
