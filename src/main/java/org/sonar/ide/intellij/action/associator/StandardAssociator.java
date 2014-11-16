@@ -33,6 +33,14 @@ public class StandardAssociator implements SonarQubeAssociator {
   }
 
   @Override
+  public String getProjectName() {
+    if (mavenProjectsManager.isMavenizedProject() && mavenProjectsManager.hasProjects()) {
+      return mavenProjectsManager.getRootProjects().get(0).getDisplayName();
+    }
+    return null;
+  }
+
+  @Override
   public void associate(@NotNull ISonarRemoteProject sonarProject) {
     Module[] ijModules = moduleManager.getModules();
     settings.getModuleKeys().clear();

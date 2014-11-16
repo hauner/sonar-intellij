@@ -45,7 +45,7 @@ public class AssociateWithSonarQube extends AnAction {
           ModuleManager.getInstance(p), SonarQubeConsole.getSonarQubeConsole(p), WSClientFactory.getInstance());
 
       SonarQubeAction action = new SonarQubeAction(p, settings, dialog, associator);
-      action.associate(getProjectName(p));
+      action.associate(associator.getProjectName());
     }
   }
 
@@ -60,15 +60,5 @@ public class AssociateWithSonarQube extends AnAction {
         e.getPresentation().setText(SonarQubeBundle.message("sonarqube.associate.action.label_update"));
       }
     }
-  }
-
-  private String getProjectName(Project project) {
-    MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(project);
-
-    if (mavenProjectsManager.isMavenizedProject() && mavenProjectsManager.hasProjects()) {
-      return mavenProjectsManager.getRootProjects().get(0).getDisplayName();
-    }
-
-    return null;
   }
 }
