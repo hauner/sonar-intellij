@@ -2,7 +2,6 @@ package org.sonar.ide.intellij.action;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import org.jetbrains.annotations.Nullable;
 import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
@@ -22,14 +21,11 @@ public class SonarQubeAction {
   }
 
   public void associate() {
-    associate(null);
-  }
-
-  public void associate(@Nullable String projectName) {
     if (settings.isAssociated()) {
       dialog.setSelectedSonarQubeProject(settings.getServerId(), settings.getProjectKey());
     } else {
       // try to guess project association
+      String projectName = associator.getProjectName();
       if (projectName != null) {
         dialog.setFilter(projectName);
       }

@@ -48,9 +48,10 @@ public class SonarQubeActionTest {
   @Test
   public void initializeProjectFilterInDialogWhenNotAssociatedToProject() {
     String displayName = "displayName";
+    when(associator.getProjectName()).thenReturn(displayName);
 
-    SonarQubeAction action = new SonarQubeAction(null, settings, dialog, null);
-    action.associate(displayName);
+    SonarQubeAction action = new SonarQubeAction(null, settings, dialog, associator);
+    action.associate();
 
     verify(dialog).setFilter(displayName);
   }
@@ -58,21 +59,21 @@ public class SonarQubeActionTest {
   @Test
   public void doNotInitializeProjectFilterInDialogWithoutProjectName() {
     String displayName = null;
+    when(associator.getProjectName()).thenReturn(displayName);
 
-    SonarQubeAction action = new SonarQubeAction(null, settings, dialog, null);
-    action.associate(displayName);
+    SonarQubeAction action = new SonarQubeAction(null, settings, dialog, associator);
+    action.associate();
 
     verify(dialog, never ()).setFilter(anyString());
   }
 
   @Test
   public void doNotInitializeProjectFilterInDialogIfAlreadyAssociated() {
-    String displayName = "name";
     settings.setServerId("id");
     settings.setProjectKey("key");
 
     SonarQubeAction action = new SonarQubeAction(null, settings, dialog, null);
-    action.associate(displayName);
+    action.associate();
 
     verify(dialog, never ()).setFilter(anyString());
   }
@@ -90,7 +91,7 @@ public class SonarQubeActionTest {
 
   @Test
   public void doesShowDialogWhenNotAssociated() {
-    SonarQubeAction action = new SonarQubeAction(null, settings, dialog, null);
+    SonarQubeAction action = new SonarQubeAction(null, settings, dialog, associator);
     action.associate();
 
     verify(dialog).show();
@@ -100,7 +101,7 @@ public class SonarQubeActionTest {
   public void unassociatesProjectIfDialogClosedWithUnassociate() {
     when(dialog.getExitCode()).thenReturn(AssociateDialog.UNASSOCIATE_EXIT_CODE);
 
-    SonarQubeAction action = new SonarQubeAction(null, settings, dialog, null);
+    SonarQubeAction action = new SonarQubeAction(null, settings, dialog, associator);
     action.associate();
 
     verify(dialog).show();
@@ -113,7 +114,7 @@ public class SonarQubeActionTest {
     when(dialog.getExitCode()).thenReturn(DialogWrapper.OK_EXIT_CODE);
     when(dialog.getSelectedSonarQubeProject()).thenReturn(null);
 
-    SonarQubeAction action = new SonarQubeAction(null, settings, dialog, null);
+    SonarQubeAction action = new SonarQubeAction(null, settings, dialog, associator);
     action.associate();
 
     verify(dialog).show();
