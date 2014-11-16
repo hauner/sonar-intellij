@@ -24,11 +24,13 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
+import org.sonar.ide.intellij.action.associator.GradleAssociator;
 import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
 import org.sonar.ide.intellij.action.associator.StandardAssociator;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.console.SonarQubeConsole;
+import org.sonar.ide.intellij.gradle.GradleProjectManager;
 import org.sonar.ide.intellij.util.SonarQubeBundle;
 import org.sonar.ide.intellij.wsclient.WSClientFactory;
 
@@ -38,11 +40,9 @@ public class AssociateWithSonarQube extends AnAction {
   public void actionPerformed(AnActionEvent e) {
     Project p = e.getProject();
     if (p != null) {
-      MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(p);
       ProjectSettings settings = p.getComponent(ProjectSettings.class);
       AssociateDialog dialog = new AssociateDialog(p, settings.isAssociated());
-      SonarQubeAssociator associator = new StandardAssociator(p, settings, mavenProjectsManager,
-          ModuleManager.getInstance(p), SonarQubeConsole.getSonarQubeConsole(p), WSClientFactory.getInstance());
+      SonarQubeAssociator associator = getSonarQubeAssociator(p, settings);
 
       SonarQubeAction action = new SonarQubeAction(p, settings, dialog, associator);
       action.associate();
@@ -61,4 +61,18 @@ public class AssociateWithSonarQube extends AnAction {
       }
     }
   }
+
+  private SonarQubeAssociator getSonarQubeAssociator(Project project, ProjectSettings settings) {
+    ModuleManager moduleManager = ModuleManager.getInstance(project);
+
+    GradleProjectManager gradleProjectManager = new GradleProjectManager(project, moduleManager);
+    if (gradleProjectManager.isGradleProject()) {
+      return new GradleAssociator();
+    }
+    else {
+      return new StandardAssociator(project, settings, MavenProjectsManager.getInstance(project),
+          moduleManager, SonarQubeConsole.getSonarQubeConsole(project), WSClientFactory.getInstance());
+    }
+  }
+
 }
