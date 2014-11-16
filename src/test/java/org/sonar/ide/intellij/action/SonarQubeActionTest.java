@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.wsclient.ISonarRemoteProject;

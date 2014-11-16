@@ -8,6 +8,8 @@ import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
+import org.sonar.ide.intellij.action.associator.StandardAssociator;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.console.SonarQubeConsole;
 import org.sonar.ide.intellij.model.SonarQubeServer;
@@ -59,7 +61,7 @@ public class SonarQubeAssociatorTest {
     when(sonarQubeServer.getId()).thenReturn("sonarServerId");
     when(sonarProject.getServer()).thenReturn(sonarQubeServer);
 
-    SonarQubeAssociator associator = new SonarQubeAssociator(null, settings, null, moduleManager, console, null);
+    SonarQubeAssociator associator = new StandardAssociator(null, settings, null, moduleManager, console, null);
     associator.associate(sonarProject);
 
     assertThat(settings.getModuleKeys().isEmpty(), is(true));
@@ -74,7 +76,7 @@ public class SonarQubeAssociatorTest {
     when(sonarQubeServer.getId()).thenReturn("sonarServerId");
     when(sonarProject.getServer()).thenReturn(sonarQubeServer);
 
-    SonarQubeAssociator associator = new SonarQubeAssociator(null, settings, null, moduleManager, console, null);
+    SonarQubeAssociator associator = new StandardAssociator(null, settings, null, moduleManager, console, null);
     associator.associate(sonarProject);
 
     assertThat(settings.getModuleKeys().size(), is(1));
@@ -91,7 +93,7 @@ public class SonarQubeAssociatorTest {
     when(moduleManager.getModules()).thenReturn(new Module[]{module1, module2});
     when(mavenManager.isMavenizedProject()).thenReturn(false);
 
-    SonarQubeAssociator associator = new SonarQubeAssociator(null, settings, mavenManager, moduleManager, console, null);
+    SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, null);
     associator.associate(sonarProject);
 
     verify(console).error(startsWith("Only multi-module Maven projects are supported"));
@@ -110,7 +112,7 @@ public class SonarQubeAssociatorTest {
     when(mavenManager.getRootProjects()).thenReturn(Arrays.asList(root1, root2));
     when(mavenManager.isMavenizedProject()).thenReturn(true);
 
-    SonarQubeAssociator associator = new SonarQubeAssociator(null, settings, mavenManager, moduleManager, console, null);
+    SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, null);
     associator.associate(sonarProject);
 
     verify(console).error(startsWith("Maven projects with more than 1 root project"));
@@ -142,7 +144,7 @@ public class SonarQubeAssociatorTest {
     ISonarRemoteModule remoteModule = mock(ISonarRemoteModule.class);
     when(sonarClient.getRemoteModules(sonarProject)).thenReturn(Arrays.asList(remoteModule));
 
-    SonarQubeAssociator associator = new SonarQubeAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
+    SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
     associator.associate(sonarProject);
 
     verify(sonarClient).getRemoteModules(sonarProject);
@@ -179,7 +181,7 @@ public class SonarQubeAssociatorTest {
     when(mavenManager.findProject(module1)).thenReturn(project1);
     when(mavenManager.findProject(module2)).thenReturn(null);
 
-    SonarQubeAssociator associator = new SonarQubeAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
+    SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
     associator.associate(sonarProject);
 
     verify(console).error(startsWith("Module *Module 2* is not a Maven module"));
@@ -216,7 +218,7 @@ public class SonarQubeAssociatorTest {
     when(mavenManager.findProject(module1)).thenReturn(project1);
     when(mavenManager.findProject(module2)).thenReturn(null);
 
-    SonarQubeAssociator associator = new SonarQubeAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
+    SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
     associator.associate(sonarProject);
 
     assertThat(settings.getModuleKeys().size(), is(1));
@@ -256,7 +258,7 @@ public class SonarQubeAssociatorTest {
     when(mavenManager.findProject(module1)).thenReturn(project1);
     when(mavenManager.findProject(module2)).thenReturn(null);
 
-    SonarQubeAssociator associator = new SonarQubeAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
+    SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
     associator.associate(sonarProject);
 
     assertThat(settings.getModuleKeys().size(), is(1));
@@ -296,7 +298,7 @@ public class SonarQubeAssociatorTest {
     when(mavenManager.findProject(module1)).thenReturn(project1);
     when(mavenManager.findProject(module2)).thenReturn(null);
 
-    SonarQubeAssociator associator = new SonarQubeAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
+    SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
     associator.associate(sonarProject);
 
     verify(console).error(startsWith("Unable to find matching SonarQube module"));

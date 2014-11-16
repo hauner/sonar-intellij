@@ -1,4 +1,4 @@
-package org.sonar.ide.intellij.action;
+package org.sonar.ide.intellij.action.associator;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -14,7 +14,7 @@ import org.sonar.ide.intellij.wsclient.WSClientFactory;
 
 import java.util.List;
 
-public class SonarQubeAssociator {
+public class StandardAssociator implements SonarQubeAssociator {
   private final MavenProjectsManager mavenProjectsManager;
   private ProjectSettings settings;
   private Project p;
@@ -22,8 +22,8 @@ public class SonarQubeAssociator {
   private SonarQubeConsole console;
   private WSClientFactory clientFactory;
 
-  public SonarQubeAssociator (Project p, ProjectSettings settings, MavenProjectsManager mavenProjectsManager,
-                              ModuleManager moduleManger, SonarQubeConsole console, WSClientFactory clientFactory) {
+  public StandardAssociator(Project p, ProjectSettings settings, MavenProjectsManager mavenProjectsManager,
+                            ModuleManager moduleManger, SonarQubeConsole console, WSClientFactory clientFactory) {
     this.p = p;
     this.settings = settings;
     this.mavenProjectsManager = mavenProjectsManager;
@@ -32,6 +32,7 @@ public class SonarQubeAssociator {
     this.clientFactory = clientFactory;
   }
 
+  @Override
   public void associate(@NotNull ISonarRemoteProject sonarProject) {
     Module[] ijModules = moduleManager.getModules();
     settings.getModuleKeys().clear();

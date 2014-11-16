@@ -3,6 +3,7 @@ package org.sonar.ide.intellij.action;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.wsclient.ISonarRemoteProject;
