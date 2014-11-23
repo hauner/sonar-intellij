@@ -2,9 +2,10 @@ package org.sonar.ide.intellij.action;
 
 import com.intellij.openapi.project.Project;
 import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
+import org.sonar.ide.intellij.action.associator.facades.SonarProject;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
-import org.sonar.ide.intellij.wsclient.ISonarRemoteProject;
+
 
 public class SonarQubeAction {
   private Project project;
@@ -40,7 +41,7 @@ public class SonarQubeAction {
     } else if (dialog.isExitCodeOk()) {
       settings.setServerId(null);
       settings.setProjectKey(null);
-      ISonarRemoteProject sonarProject = dialog.getSelectedSonarQubeProject();
+      SonarProject sonarProject = dialog.getSelectedSonarProject();
       if (sonarProject == null) {
         settings.unassociate();
       } else {

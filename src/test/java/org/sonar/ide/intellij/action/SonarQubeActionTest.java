@@ -4,9 +4,9 @@ import com.intellij.openapi.project.Project;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
+import org.sonar.ide.intellij.action.associator.facades.SonarProject;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
-import org.sonar.ide.intellij.wsclient.ISonarRemoteProject;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -127,10 +127,10 @@ public class SonarQubeActionTest {
 
   @Test
   public void associateProjectIfSelectedInDialog() {
-    ISonarRemoteProject sonarProject = mock(ISonarRemoteProject.class);
+    SonarProject sonarProject = mock(SonarProject.class);
 
     when(dialog.isExitCodeOk()).thenReturn(true);
-    when(dialog.getSelectedSonarQubeProject()).thenReturn(sonarProject);
+    when(dialog.getSelectedSonarProject()).thenReturn(sonarProject);
 
     SonarQubeAction action = new SonarQubeAction(project, settings, dialog, associator);
     action.associate();

@@ -25,6 +25,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.ide.intellij.action.associator.facades.SonarProject;
 import org.sonar.ide.intellij.config.SonarQubeSettings;
 import org.sonar.ide.intellij.console.SonarQubeConsole;
 import org.sonar.ide.intellij.model.SonarQubeServer;
@@ -206,5 +207,15 @@ public class AssociateDialog extends DialogWrapper {
 
   public boolean isExitCodeOk() {
     return getExitCode() == OK_EXIT_CODE;
+  }
+
+  @Nullable
+  public SonarProject getSelectedSonarProject() {
+    ISonarRemoteProject remoteProject = getSelectedSonarQubeProject();
+    if (remoteProject == null) {
+      return null;
+    }
+
+    return new SonarProject(remoteProject);
   }
 }
