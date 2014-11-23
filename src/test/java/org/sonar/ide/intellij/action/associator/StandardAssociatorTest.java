@@ -8,6 +8,7 @@ import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.ide.intellij.action.associator.facades.SonarProject;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.console.SonarQubeConsole;
 import org.sonar.ide.intellij.model.SonarQubeServer;
@@ -60,7 +61,7 @@ public class StandardAssociatorTest {
     when(sonarProject.getServer()).thenReturn(sonarQubeServer);
 
     SonarQubeAssociator associator = new StandardAssociator(null, settings, null, moduleManager, console, null);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     assertThat(settings.getModuleKeys().isEmpty(), is(true));
   }
@@ -75,7 +76,7 @@ public class StandardAssociatorTest {
     when(sonarProject.getServer()).thenReturn(sonarQubeServer);
 
     SonarQubeAssociator associator = new StandardAssociator(null, settings, null, moduleManager, console, null);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     assertThat(settings.getModuleKeys().size(), is(1));
     assertThat(settings.getModuleKeys().containsKey("moduleName"), is(true));
@@ -92,7 +93,7 @@ public class StandardAssociatorTest {
     when(mavenManager.isMavenizedProject()).thenReturn(false);
 
     SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, null);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     verify(console).error(startsWith("Only multi-module Maven projects are supported"));
     assertThat(settings.isAssociated(), is(false));
@@ -111,7 +112,7 @@ public class StandardAssociatorTest {
     when(mavenManager.isMavenizedProject()).thenReturn(true);
 
     SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, null);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     verify(console).error(startsWith("Maven projects with more than 1 root project"));
     assertThat(settings.isAssociated(), is(false));
@@ -143,7 +144,7 @@ public class StandardAssociatorTest {
     when(sonarClient.getRemoteModules(sonarProject)).thenReturn(Arrays.asList(remoteModule));
 
     SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     verify(sonarClient).getRemoteModules(sonarProject);
     verify(console).info(startsWith("Project has 1 modules while remote"));
@@ -180,7 +181,7 @@ public class StandardAssociatorTest {
     when(mavenManager.findProject(module2)).thenReturn(null);
 
     SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     verify(console).error(startsWith("Module *Module 2* is not a Maven module"));
   }
@@ -217,7 +218,7 @@ public class StandardAssociatorTest {
     when(mavenManager.findProject(module2)).thenReturn(null);
 
     SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     assertThat(settings.getModuleKeys().size(), is(1));
     assertThat(settings.getModuleKeys().containsKey("*Module 1*"), is(true));
@@ -257,7 +258,7 @@ public class StandardAssociatorTest {
     when(mavenManager.findProject(module2)).thenReturn(null);
 
     SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     assertThat(settings.getModuleKeys().size(), is(1));
     assertThat(settings.getModuleKeys().containsKey("*Module 1*"), is(true));
@@ -297,7 +298,7 @@ public class StandardAssociatorTest {
     when(mavenManager.findProject(module2)).thenReturn(null);
 
     SonarQubeAssociator associator = new StandardAssociator(null, settings, mavenManager, moduleManager, console, clientFactory);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     verify(console).error(startsWith("Unable to find matching SonarQube module"));
   }

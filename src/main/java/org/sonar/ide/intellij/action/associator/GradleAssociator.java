@@ -30,6 +30,10 @@ public class GradleAssociator implements SonarQubeAssociator {
   }
 
   @Override
+  public void associate(@NotNull SonarProject sonarProject) {
+    associate(sonarProject.getProject());
+  }
+
   public void associate(@NotNull ISonarRemoteProject sonarProject) {
     settings.setServerId(sonarProject.getServer().getId());
     settings.setProjectKey(sonarProject.getKey());
@@ -40,10 +44,5 @@ public class GradleAssociator implements SonarQubeAssociator {
     for (Module module : modules) {
       settings.getModuleKeys().put(module.getName(), sonarProject.getKey());
     }
-  }
-
-  @Override
-  public void associate(@NotNull SonarProject sonarProject) {
-    associate(sonarProject.getProject());
   }
 }

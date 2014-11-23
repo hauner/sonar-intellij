@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.ide.intellij.action.associator.facades.IdeaProject;
+import org.sonar.ide.intellij.action.associator.facades.SonarProject;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.gradle.SonarModelSettings;
 import org.sonar.ide.intellij.model.SonarQubeServer;
@@ -72,7 +73,7 @@ public class GradleAssociatorTest {
     when(sonarQubeServer.getId()).thenReturn(serverId);
 
     SonarQubeAssociator associator = new GradleAssociator(project, settings, moduleManager);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     assertThat(settings.getModuleKeys().isEmpty(), is(true));
   }
@@ -91,7 +92,7 @@ public class GradleAssociatorTest {
     when(sonarQubeServer.getId()).thenReturn(serverId);
 
     SonarQubeAssociator associator = new GradleAssociator(project, settings, moduleManager);
-    associator.associate(sonarProject);
+    associator.associate(new SonarProject(sonarProject));
 
     assertThat(settings.getModuleKeys().size(), is(1));
     assertThat(settings.getModuleKeys().containsKey(moduleName), is(true));

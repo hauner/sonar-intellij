@@ -13,4 +13,14 @@ public class SonarProject {
   public ISonarRemoteProject getProject() {
     return project;
   }
+
+  // SonarProjectKey
+  public String getKey() {
+    return null;
+  }
+
+  // ServerId
+  public String getId() {
+    return null;
+  }
 }

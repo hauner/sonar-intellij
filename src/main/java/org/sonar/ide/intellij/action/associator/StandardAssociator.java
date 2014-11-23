@@ -46,7 +46,6 @@ public class StandardAssociator implements SonarQubeAssociator {
     associate(sonarProject.getProject());
   }
 
-  @Override
   public void associate(@NotNull ISonarRemoteProject sonarProject) {
     Module[] ijModules = moduleManager.getModules();
     settings.getModuleKeys().clear();
