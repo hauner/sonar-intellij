@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.sonar.ide.intellij.action.associator.facades.IdeaProject;
 import org.sonar.ide.intellij.action.associator.facades.SonarProject;
 import org.sonar.ide.intellij.config.ProjectSettings;
-import org.sonar.ide.intellij.wsclient.ISonarRemoteProject;
 
 
 public class GradleAssociator implements SonarQubeAssociator {
@@ -31,11 +30,7 @@ public class GradleAssociator implements SonarQubeAssociator {
 
   @Override
   public void associate(@NotNull SonarProject sonarProject) {
-    associate(sonarProject.getProject());
-  }
-
-  public void associate(@NotNull ISonarRemoteProject sonarProject) {
-    settings.setServerId(sonarProject.getServer().getId());
+    settings.setServerId(sonarProject.getId());
     settings.setProjectKey(sonarProject.getKey());
 
     settings.getModuleKeys().clear();
@@ -45,4 +40,5 @@ public class GradleAssociator implements SonarQubeAssociator {
       settings.getModuleKeys().put(module.getName(), sonarProject.getKey());
     }
   }
+
 }

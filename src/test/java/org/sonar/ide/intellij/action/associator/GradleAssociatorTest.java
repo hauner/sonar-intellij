@@ -9,8 +9,6 @@ import org.sonar.ide.intellij.action.associator.facades.IdeaProject;
 import org.sonar.ide.intellij.action.associator.facades.SonarProject;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.gradle.SonarModelSettings;
-import org.sonar.ide.intellij.model.SonarQubeServer;
-import org.sonar.ide.intellij.wsclient.ISonarRemoteProject;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -24,8 +22,7 @@ public class GradleAssociatorTest {
   Project project;
   ProjectSettings settings;
   ModuleManager moduleManager;
-  ISonarRemoteProject sonarProject;
-  SonarQubeServer sonarQubeServer;
+  SonarProject sonarProject;
   SonarModelSettings sonarModelSettings;
 
   IdeaProject ideaProject;
@@ -35,8 +32,7 @@ public class GradleAssociatorTest {
     project = mock(Project.class);
     settings = new ProjectSettings();
     moduleManager = mock(ModuleManager.class);
-    sonarProject = mock(ISonarRemoteProject.class);
-    sonarQubeServer = mock(SonarQubeServer.class);
+    sonarProject = mock(SonarProject.class);
     sonarModelSettings = mock(SonarModelSettings.class);
 
     ideaProject = mock(IdeaProject.class);
@@ -68,12 +64,11 @@ public class GradleAssociatorTest {
 
     String sonarProjectKey = "Sonar Project Key";
     when(sonarProject.getKey()).thenReturn(sonarProjectKey);
-    when(sonarProject.getServer()).thenReturn(sonarQubeServer);
     String serverId = "Sonar Server Id";
-    when(sonarQubeServer.getId()).thenReturn(serverId);
+    when(sonarProject.getId()).thenReturn(sonarProjectKey);
 
     SonarQubeAssociator associator = new GradleAssociator(project, settings, moduleManager);
-    associator.associate(new SonarProject(sonarProject));
+    associator.associate(sonarProject);
 
     assertThat(settings.getModuleKeys().isEmpty(), is(true));
   }
@@ -87,12 +82,11 @@ public class GradleAssociatorTest {
 
     String sonarProjectKey = "Sonar Project Key";
     when(sonarProject.getKey()).thenReturn(sonarProjectKey);
-    when(sonarProject.getServer()).thenReturn(sonarQubeServer);
     String serverId = "Sonar Server Id";
-    when(sonarQubeServer.getId()).thenReturn(serverId);
+    when(sonarProject.getId()).thenReturn(serverId);
 
     SonarQubeAssociator associator = new GradleAssociator(project, settings, moduleManager);
-    associator.associate(new SonarProject(sonarProject));
+    associator.associate(sonarProject);
 
     assertThat(settings.getModuleKeys().size(), is(1));
     assertThat(settings.getModuleKeys().containsKey(moduleName), is(true));
