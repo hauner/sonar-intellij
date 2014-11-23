@@ -1,6 +1,5 @@
 package org.sonar.ide.intellij.action.associator;
 
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import org.junit.Before;
@@ -10,11 +9,11 @@ import org.sonar.ide.intellij.action.associator.facades.SonarProject;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.gradle.SonarModelSettings;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -59,39 +58,33 @@ public class GradleAssociatorTest {
 
   @Test
   public void reAssociatingAProjectClearsPreviousModuleAssociations() {
-    settings.getModuleKeys().put("localModuleName", "remoteProjectKey");
-    when(moduleManager.getModules()).thenReturn(new Module[]{});
-
+    String ideaProjectName = "Idea Project Name";
     String sonarProjectKey = "Sonar Project Key";
+    String sonarServerId = "Sonar Server Id";
+    when(ideaProject.getName()).thenReturn(ideaProjectName);
     when(sonarProject.getKey()).thenReturn(sonarProjectKey);
-    String serverId = "Sonar Server Id";
-    when(sonarProject.getServerId()).thenReturn(sonarProjectKey);
+    when(sonarProject.getServerId()).thenReturn(sonarServerId);
 
-    SonarQubeAssociator associator = new GradleAssociator(project, settings, moduleManager);
+    SonarQubeAssociator associator = new GradleAssociator(ideaProject);
     associator.associate(sonarProject);
 
-    assertThat(settings.getModuleKeys().isEmpty(), is(true));
+    verify(ideaProject).clearSonarModuleAssociations();
   }
 
   @Test
   public void associatesSingleModuleProject () {
-    String moduleName = "Root Module";
-    Module module = mock(Module.class);
-    when(module.getName()).thenReturn(moduleName);
-    when(moduleManager.getModules()).thenReturn(new Module[]{module});
-
+    String ideaProjectName = "Idea Project Name";
     String sonarProjectKey = "Sonar Project Key";
+    String sonarServerId = "Sonar Server Id";
+    when(ideaProject.getName()).thenReturn(ideaProjectName);
     when(sonarProject.getKey()).thenReturn(sonarProjectKey);
-    String serverId = "Sonar Server Id";
-    when(sonarProject.getServerId()).thenReturn(serverId);
+    when(sonarProject.getServerId()).thenReturn(sonarServerId);
 
-    SonarQubeAssociator associator = new GradleAssociator(project, settings, moduleManager);
+    SonarQubeAssociator associator = new GradleAssociator(ideaProject);
     associator.associate(sonarProject);
 
-    assertThat(settings.getModuleKeys().size(), is(1));
-    assertThat(settings.getModuleKeys().containsKey(moduleName), is(true));
-    assertThat(settings.getModuleKeys().get(moduleName), equalTo(sonarProjectKey));
-    assertThat(settings.getProjectKey(), is(sonarProjectKey));
-    assertThat(settings.getServerId(), is(serverId));
+    verify(ideaProject).setSonarServerId(sonarServerId);
+    verify(ideaProject).setSonarProjectKey(sonarProjectKey);
+    verify(ideaProject).addSonarModuleAssociation(ideaProjectName, sonarProjectKey);
   }
 }

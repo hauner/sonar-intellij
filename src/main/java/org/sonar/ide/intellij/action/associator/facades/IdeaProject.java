@@ -17,6 +17,10 @@ public class IdeaProject {
     this.moduleManager = moduleManager;
   }
 
+  public String getName() {
+    return null;
+  }
+
   public @Nullable String getSonarProjectName() {
     Module module = moduleManager.findModuleByName(project.getName());
     if (module == null) {
@@ -25,4 +29,25 @@ public class IdeaProject {
 
     return module.getComponent(SonarModelSettings.class).getSonarProjectName();
   }
+
+  public void setSonarServerId(String serverId) {
+
+  }
+
+  public void setSonarProjectKey(String sonarProjectKey) {
+
+  }
+
+  public void clearSonarModuleAssociations() {
+
+  }
+
+  public Module[] getModules() {
+    return new Module[0];
+  }
+
+  public void addSonarModuleAssociation(String ideaModuleName, String sonarModuleKey) {
+
+  }
+
 }
