@@ -27,6 +27,7 @@ import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.sonar.ide.intellij.action.associator.GradleAssociator;
 import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
 import org.sonar.ide.intellij.action.associator.StandardAssociator;
+import org.sonar.ide.intellij.action.facade.IdeaProject;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.console.SonarQubeConsole;
@@ -67,7 +68,7 @@ public class AssociateWithSonarQube extends AnAction {
 
     GradleProjectManager gradleProjectManager = new GradleProjectManager(project, moduleManager);
     if (gradleProjectManager.isGradleProject()) {
-      return new GradleAssociator(project, settings, moduleManager);
+      return new GradleAssociator(new IdeaProject(project, /* settings,*/ moduleManager));
     }
     else {
       return new StandardAssociator(project, settings, MavenProjectsManager.getInstance(project),

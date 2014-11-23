@@ -5,6 +5,7 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.ide.intellij.action.facade.IdeaProject;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.gradle.SonarModelSettings;
 import org.sonar.ide.intellij.model.SonarQubeServer;
@@ -12,6 +13,7 @@ import org.sonar.ide.intellij.wsclient.ISonarRemoteProject;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -25,6 +27,8 @@ public class GradleAssociatorTest {
   SonarQubeServer sonarQubeServer;
   SonarModelSettings sonarModelSettings;
 
+  IdeaProject ideaProject;
+
   @Before
   public void setUp() throws Exception {
     project = mock(Project.class);
@@ -33,42 +37,28 @@ public class GradleAssociatorTest {
     sonarProject = mock(ISonarRemoteProject.class);
     sonarQubeServer = mock(SonarQubeServer.class);
     sonarModelSettings = mock(SonarModelSettings.class);
+
+    ideaProject = mock(IdeaProject.class);
   }
 
   @Test
-  public void knowsTheNameOfTheProjectModuleOld() {
-    String prjName = "Project Module";
-    when(project.getName()).thenReturn(prjName);
+  public void getsTheNameOfTheProjectInSonarIfItExists() {
+    String sonarProjectName = "Sonar Project Name";
+    when(ideaProject.getSonarProjectName()).thenReturn(sonarProjectName);
 
-    Module prjModule = mock(Module.class);
-    when(prjModule.getComponent(SonarModelSettings.class)).thenReturn(sonarModelSettings);
-    when(moduleManager.findModuleByName(prjName)).thenReturn(prjModule);
+    SonarQubeAssociator associator = new GradleAssociator(ideaProject);
 
-    String prjNameSonar = "Project Sonar";
-    when(sonarModelSettings.getSonarProjectName()).thenReturn(prjNameSonar);
-
-    SonarQubeAssociator associator = new GradleAssociator(project, settings, moduleManager);
-
-    assertThat(associator.getProjectName(), is(prjNameSonar));
+    assertThat(associator.getProjectName(), is(sonarProjectName));
   }
 
   @Test
-  public void knowsTheNameOfTheProjectModule() {
-    String prjName = "Project Module";
-    when(project.getName()).thenReturn(prjName);
+  public void getsTheNameOfTheProjectInSonarIfItDoesNotExist() {
+    when(ideaProject.getSonarProjectName()).thenReturn(null);
 
-    Module prjModule = mock(Module.class);
-    when(prjModule.getComponent(SonarModelSettings.class)).thenReturn(sonarModelSettings);
-    when(moduleManager.findModuleByName(prjName)).thenReturn(prjModule);
+    SonarQubeAssociator associator = new GradleAssociator(ideaProject);
 
-    String prjNameSonar = "Project Sonar";
-    when(sonarModelSettings.getSonarProjectName()).thenReturn(prjNameSonar);
-
-    SonarQubeAssociator associator = new GradleAssociator(project, settings, moduleManager);
-
-    assertThat(associator.getProjectName(), is(prjNameSonar));
+    assertThat(associator.getProjectName(), is(nullValue()));
   }
-
 
   @Test
   public void reAssociatingAProjectClearsPreviousModuleAssociations() {
