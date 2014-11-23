@@ -24,7 +24,7 @@ public class GradleAssociator implements SonarQubeAssociator {
   }
 
   @Override
-  public String getProjectName() {
+  public String getSonarProjectName() {
     return ideaProject.getSonarProjectName();
   }
 

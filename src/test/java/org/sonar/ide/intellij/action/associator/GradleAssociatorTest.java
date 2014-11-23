@@ -48,7 +48,7 @@ public class GradleAssociatorTest {
 
     SonarQubeAssociator associator = new GradleAssociator(ideaProject);
 
-    assertThat(associator.getProjectName(), is(sonarProjectName));
+    assertThat(associator.getSonarProjectName(), is(sonarProjectName));
   }
 
   @Test
@@ -57,7 +57,7 @@ public class GradleAssociatorTest {
 
     SonarQubeAssociator associator = new GradleAssociator(ideaProject);
 
-    assertThat(associator.getProjectName(), is(nullValue()));
+    assertThat(associator.getSonarProjectName(), is(nullValue()));
   }
 
   @Test

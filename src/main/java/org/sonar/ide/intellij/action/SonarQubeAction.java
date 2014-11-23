@@ -25,7 +25,7 @@ public class SonarQubeAction {
       dialog.setSelectedSonarQubeProject(settings.getServerId(), settings.getProjectKey());
     } else {
       // try to guess project association
-      String projectName = associator.getProjectName();
+      String projectName = associator.getSonarProjectName();
       if (projectName != null) {
         dialog.setFilter(projectName);
       }

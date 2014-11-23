@@ -48,7 +48,7 @@ public class SonarQubeActionTest {
   @Test
   public void initializeProjectFilterInDialogWhenNotAssociatedToProject() {
     String displayName = "displayName";
-    when(associator.getProjectName()).thenReturn(displayName);
+    when(associator.getSonarProjectName()).thenReturn(displayName);
 
     SonarQubeAction action = new SonarQubeAction(null, settings, dialog, associator);
     action.associate();
@@ -59,7 +59,7 @@ public class SonarQubeActionTest {
   @Test
   public void doNotInitializeProjectFilterInDialogWithoutProjectName() {
     String displayName = null;
-    when(associator.getProjectName()).thenReturn(displayName);
+    when(associator.getSonarProjectName()).thenReturn(displayName);
 
     SonarQubeAction action = new SonarQubeAction(null, settings, dialog, associator);
     action.associate();

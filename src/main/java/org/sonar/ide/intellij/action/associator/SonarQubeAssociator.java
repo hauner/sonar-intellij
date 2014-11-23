@@ -6,6 +6,6 @@ import org.sonar.ide.intellij.wsclient.ISonarRemoteProject;
 
 
 public interface SonarQubeAssociator {
-  @Nullable String getProjectName();
+  @Nullable String getSonarProjectName();
   void associate(@NotNull ISonarRemoteProject sonarProject);
 }
