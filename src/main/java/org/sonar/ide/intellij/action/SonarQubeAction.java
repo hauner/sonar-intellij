@@ -1,7 +1,6 @@
 package org.sonar.ide.intellij.action;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
 import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
@@ -38,7 +37,7 @@ public class SonarQubeAction {
   private void processResult(Project p, ProjectSettings settings, AssociateDialog dialog) {
     if (dialog.isExitCodeUnassociate()) {
       settings.unassociate();
-    } else if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
+    } else if (dialog.isExitCodeOk()) {
       settings.setServerId(null);
       settings.setProjectKey(null);
       ISonarRemoteProject sonarProject = dialog.getSelectedSonarQubeProject();

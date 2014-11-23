@@ -1,7 +1,6 @@
 package org.sonar.ide.intellij.action;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
@@ -113,14 +112,16 @@ public class SonarQubeActionTest {
 
   @Test
   public void unassociatesProjectIfUnselectedInDialog() {
-    when(dialog.getExitCode()).thenReturn(DialogWrapper.OK_EXIT_CODE);
+    settings.setServerId("serverId");
+    settings.setProjectKey("projectKey");
+
+    when(dialog.isExitCodeOk()).thenReturn(true);
     when(dialog.getSelectedSonarQubeProject()).thenReturn(null);
 
     SonarQubeAction action = new SonarQubeAction(null, settings, dialog, associator);
     action.associate();
 
     verify(dialog).show();
-    verify(dialog, atLeastOnce()).getExitCode();
     assertThat(settings.isAssociated(), is(false));
   }
 
@@ -128,14 +129,13 @@ public class SonarQubeActionTest {
   public void associateProjectIfSelectedInDialog() {
     ISonarRemoteProject sonarProject = mock(ISonarRemoteProject.class);
 
-    when(dialog.getExitCode()).thenReturn(DialogWrapper.OK_EXIT_CODE);
+    when(dialog.isExitCodeOk()).thenReturn(true);
     when(dialog.getSelectedSonarQubeProject()).thenReturn(sonarProject);
 
     SonarQubeAction action = new SonarQubeAction(project, settings, dialog, associator);
     action.associate();
 
     verify(dialog).show();
-    verify(dialog, atLeastOnce()).getExitCode();
     verify(associator).associate(sonarProject);
   }
 }
