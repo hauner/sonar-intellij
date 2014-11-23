@@ -1,4 +1,4 @@
-package org.sonar.ide.intellij.action.facade;
+package org.sonar.ide.intellij.action.associator.facades;
 
 
 import com.intellij.openapi.module.Module;

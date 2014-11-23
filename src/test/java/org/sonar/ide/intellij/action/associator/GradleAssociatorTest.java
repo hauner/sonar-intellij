@@ -5,7 +5,7 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.ide.intellij.action.facade.IdeaProject;
+import org.sonar.ide.intellij.action.associator.facades.IdeaProject;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.gradle.SonarModelSettings;
 import org.sonar.ide.intellij.model.SonarQubeServer;

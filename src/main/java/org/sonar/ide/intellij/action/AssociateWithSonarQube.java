@@ -27,7 +27,7 @@ import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.sonar.ide.intellij.action.associator.GradleAssociator;
 import org.sonar.ide.intellij.action.associator.SonarQubeAssociator;
 import org.sonar.ide.intellij.action.associator.StandardAssociator;
-import org.sonar.ide.intellij.action.facade.IdeaProject;
+import org.sonar.ide.intellij.action.associator.facades.IdeaProject;
 import org.sonar.ide.intellij.associate.AssociateDialog;
 import org.sonar.ide.intellij.config.ProjectSettings;
 import org.sonar.ide.intellij.console.SonarQubeConsole;
