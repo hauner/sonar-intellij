@@ -18,14 +18,12 @@ import java.util.List;
 public class StandardAssociator implements SonarQubeAssociator {
   private final MavenProjectsManager mavenProjectsManager;
   private ProjectSettings settings;
-  private Project p;
   private ModuleManager moduleManager;
   private SonarQubeConsole console;
   private WSClientFactory clientFactory;
 
   public StandardAssociator(Project p, ProjectSettings settings, MavenProjectsManager mavenProjectsManager,
                             ModuleManager moduleManger, SonarQubeConsole console, WSClientFactory clientFactory) {
-    this.p = p;
     this.settings = settings;
     this.mavenProjectsManager = mavenProjectsManager;
     this.moduleManager = moduleManger;
