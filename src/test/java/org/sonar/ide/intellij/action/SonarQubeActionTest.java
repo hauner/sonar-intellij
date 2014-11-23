@@ -99,13 +99,15 @@ public class SonarQubeActionTest {
 
   @Test
   public void unassociatesProjectIfDialogClosedWithUnassociate() {
-    when(dialog.getExitCode()).thenReturn(AssociateDialog.UNASSOCIATE_EXIT_CODE);
+    settings.setServerId("serverId");
+    settings.setProjectKey("projectKey");
+
+    when(dialog.isExitCodeUnassociate()).thenReturn(true);
 
     SonarQubeAction action = new SonarQubeAction(null, settings, dialog, associator);
     action.associate();
 
     verify(dialog).show();
-    verify(dialog).getExitCode();
     assertThat(settings.isAssociated(), is(false));
   }
 

@@ -36,7 +36,7 @@ public class SonarQubeAction {
 
 
   private void processResult(Project p, ProjectSettings settings, AssociateDialog dialog) {
-    if (dialog.getExitCode() == AssociateDialog.UNASSOCIATE_EXIT_CODE) {
+    if (dialog.isExitCodeUnassociate()) {
       settings.unassociate();
     } else if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
       settings.setServerId(null);

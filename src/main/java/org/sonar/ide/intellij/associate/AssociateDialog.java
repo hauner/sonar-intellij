@@ -199,4 +199,8 @@ public class AssociateDialog extends DialogWrapper {
       }
     }
   }
+
+  public boolean isExitCodeUnassociate() {
+    return getExitCode() == UNASSOCIATE_EXIT_CODE;
+  }
 }
