@@ -30,7 +30,7 @@ public class GradleAssociator implements SonarQubeAssociator {
 
   @Override
   public void associate(@NotNull SonarProject sonarProject) {
-    settings.setServerId(sonarProject.getId());
+    settings.setServerId(sonarProject.getServerId());
     settings.setProjectKey(sonarProject.getKey());
 
     settings.getModuleKeys().clear();

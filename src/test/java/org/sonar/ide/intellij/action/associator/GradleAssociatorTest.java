@@ -65,7 +65,7 @@ public class GradleAssociatorTest {
     String sonarProjectKey = "Sonar Project Key";
     when(sonarProject.getKey()).thenReturn(sonarProjectKey);
     String serverId = "Sonar Server Id";
-    when(sonarProject.getId()).thenReturn(sonarProjectKey);
+    when(sonarProject.getServerId()).thenReturn(sonarProjectKey);
 
     SonarQubeAssociator associator = new GradleAssociator(project, settings, moduleManager);
     associator.associate(sonarProject);
@@ -83,7 +83,7 @@ public class GradleAssociatorTest {
     String sonarProjectKey = "Sonar Project Key";
     when(sonarProject.getKey()).thenReturn(sonarProjectKey);
     String serverId = "Sonar Server Id";
-    when(sonarProject.getId()).thenReturn(serverId);
+    when(sonarProject.getServerId()).thenReturn(serverId);
 
     SonarQubeAssociator associator = new GradleAssociator(project, settings, moduleManager);
     associator.associate(sonarProject);
