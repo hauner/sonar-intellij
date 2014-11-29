@@ -4,7 +4,7 @@ import com.intellij.openapi.util.Key;
 
 
 public class SonarModelData {
-  public final static Key<SonarModelData> KEY = new Key<SonarModelData>("Sonar.Gradle");
+  public static final Key<SonarModelData> KEY = new Key<SonarModelData>("Sonar.Gradle");
 
   private String projectKey;
   private String projectName;

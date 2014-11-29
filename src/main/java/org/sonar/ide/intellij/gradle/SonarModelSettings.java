@@ -23,9 +23,11 @@ public class SonarModelSettings implements PersistentStateComponent<SonarModelSe
   }
 
   public void initComponent() {
+    // unused
   }
 
   public void disposeComponent() {
+    // unused
   }
 
   @NotNull
@@ -34,12 +36,15 @@ public class SonarModelSettings implements PersistentStateComponent<SonarModelSe
   }
 
   public void projectOpened() {
+    // unused
   }
 
   public void projectClosed() {
+    // unused
   }
 
   public void moduleAdded() {
+    // unused
   }
 
   @Nullable
