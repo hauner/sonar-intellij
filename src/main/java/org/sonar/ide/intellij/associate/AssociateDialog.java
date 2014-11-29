@@ -216,6 +216,8 @@ public class AssociateDialog extends DialogWrapper {
       return null;
     }
 
-    return new SonarProject(remoteProject);
+    ISonarWSClientFacade sonarClient = serverClients.get(remoteProject.getServer());
+
+    return new SonarProject(remoteProject, sonarClient);
   }
 }

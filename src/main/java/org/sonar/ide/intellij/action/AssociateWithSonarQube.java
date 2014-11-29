@@ -68,7 +68,7 @@ public class AssociateWithSonarQube extends AnAction {
 
     GradleProjectManager gradleProjectManager = new GradleProjectManager(project, moduleManager);
     if (gradleProjectManager.isGradleProject()) {
-      return new GradleAssociator(new IdeaProject(project, /* settings,*/ moduleManager));
+      return new GradleAssociator(new IdeaProject(project, settings, moduleManager));
     }
     else {
       return new StandardAssociator(project, settings, MavenProjectsManager.getInstance(project),
