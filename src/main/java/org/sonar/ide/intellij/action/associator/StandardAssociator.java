@@ -3,7 +3,6 @@ package org.sonar.ide.intellij.action.associator;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.sonar.ide.intellij.action.associator.facades.SonarProject;
@@ -40,11 +39,11 @@ public class StandardAssociator implements SonarQubeAssociator {
   }
 
   @Override
-  public void associate(@NotNull SonarProject sonarProject) {
+  public void associate(SonarProject sonarProject) {
     associate(sonarProject.getProject());
   }
 
-  public void associate(@NotNull ISonarRemoteProject sonarProject) {
+  public void associate(ISonarRemoteProject sonarProject) {
     Module[] ijModules = moduleManager.getModules();
     settings.getModuleKeys().clear();
     if (ijModules.length == 1) {
