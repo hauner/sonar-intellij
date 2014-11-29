@@ -66,6 +66,12 @@ dependencies {
 
 sourceSets {
     main {
+        // IDEA needs classes/resources output in the same directory to
+        // - run & debug the plugin
+        // - run "prepare plugin for deployment"
+        output.classesDir = "$buildDir/plugin"
+        output.resourcesDir = "$buildDir/plugin"
+
         compileClasspath += configurations.provided
     }
 
@@ -75,19 +81,20 @@ sourceSets {
     }
 }
 
-
-task copyResourceToSandbox(type: Copy) {
-    from sourceSets.main.output.resourcesDir
-    into "${intellij_sandbox}/classes"
-}
-
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.2'
-}
-
 idea {
     module {
         scopes.PROVIDED.plus += [configurations.provided]
     }
+}
+
+// -- Tasks -------------------------------------------------------------------
+
+// handle joined classes/resources output to avoid duplicated files in the jar
+task jar (type: Jar, overwrite: true) {
+    dependsOn classes
+    from "$buildDir/plugin"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
 }
